@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		
+		<style type="text/css">
+			
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			ul li {
+				list-style: none;
+			}
+			
+			#main {
+				width: 760px;
+				height: 300px;
+				position: relative;
+				margin: 50px auto;
+			}
+			
+			#main .pic {
+				width: 760px;
+				height: 300px;
+				overflow: hidden;
+			}
+			#main .pic ul li {
+				width: 760px;
+				height: 300px;
+				position: relative;
+				
+			}
+			#main .pic ul li .img1 {
+				position: absolute;
+				top: 0;
+				/*img1在最左侧看不见*/
+				left: -760px;
+			}
+			#main .pic ul li .img2 {
+				position: absolute;
+				top: 0;
+				left: -20px;
+                /*这张图片看得见,首先需要隐藏*/
+				display: none;
+			}
+			#main .nav {
+				position: absolute;
+				right: 20px;
+				bottom: 20px;
+			}
+			#main .nav ul li {
+				width: 10px;
+				height: 10px;
+				border: 1px solid #fff;
+				float: left;
+				margin-left: 5px;
+			}
+			#main .nav ul li.select{
+				background: #fff;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="main">
+			<div class="pic">
+				<ul>
+					<li style="background: url(img/bg1.jpg);">
+						<img class="img1" src="img/text1.png"/>
+						<img class="img2" src="img/con1.png"/>
+					</li>
+					<li style="background: url(img/bg2.jpg);">
+						<img class="img1" src="img/text2.png"/>
+						<img class="img2" src="img/con2.png"/>
+					</li>
+					<li style="background: url(img/bg3.jpg);">
+						<img class="img1" src="img/text3.png"/>
+						<img class="img2" src="img/con3.png"/>
+					</li>
+					<li style="background: url(img/bg4.jpg);">
+						<img class="img1" src="img/text4.png"/>
+						<img class="img2" src="img/con4.png"/>
+					</li>
+					<li style="background: url(img/bg5.jpg);">
+						<img class="img1" src="img/text5.png"/>
+						<img class="img2" src="img/con5.png"/>
+					</li>
+				</ul>
+			</div>
+			<div class="nav">
+				<ul>
+					<li class="select"></li>
+					<li></li>
+					<li></li>
+					<li></li>
+					<li></li>
+				</ul>
+			</div>
+		</div>
+		<script type="text/javascript" src="js/jquery-1.11.3.js"></script>
+		<script type="text/javascript">
+            $(function () {
+                var index = 0;
+                var timer = null;
+                var $imgwraps = $(".pic li");//所有图片的容器
+                var $navs = $(".nav li");
+                timer = setInterval(function () {
+                    index++;
+                    if(index > 4) {
+                        index = 0;
+                    }
+                    showImage();
+                },3000);
+
+                showImage();//第一次开始显示
+
+                function showImage() {
+
+                    //选中某个导航的li
+
+                    $navs.eq(index).addClass("select").siblings().removeClass("select");
+                    //先显示背景
+                    $imgwraps.eq(index).fadeIn(400).siblings().fadeOut(400);
+                    //显示图片img1,img2
+                    //img1最开始是 -760看不到
+                    $imgwraps.eq(index).find(".img1").animate({left: 0},1000, function () {
+                        //第一张图运动完毕才进行第二张图的运动
+                        $(this).next().show().animate({left: 0},1000);
+                    });
+                    //恢复样式,保证img1和img2在正确的位置上
+                    $imgwraps.eq(index).siblings().find(".img1").css({left: -760});
+                    $imgwraps.eq(index).siblings().find(".img2").hide().css({left: -20});
+                }
+
+            });
+
+
+            //横向滚动原理
+            // 外层容器 1000
+            //内容 2000,可以滚动1000
+            // box.scrollLeft()对容器进行滚动而不是内容
+            // 1 2 3 4 5 1  ,要展示5张图,需要使用10张,
+		</script>
+	</body>
+</html>
